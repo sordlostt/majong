@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ public class GameManager : Singleton<GameManager>
     TileMap tileMap;
     [SerializeField]
     MapView mapView;
+
+    public static event Action OnGameWon;
+    public static event Action OnGameLost;
 
     protected override void Awake()
     {
