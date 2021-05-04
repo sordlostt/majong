@@ -15,13 +15,17 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         RandomValues.Init();
         LayoutParser.instance.GetLayout();
+
+        GameUIHandler.OnGameQuit += EndLevel;
+
         tileMap = new TileMap();
         tileMap.InitializeMap();
         mapView.DrawView(tileMap);
     }
 
-    public void EndLevel()
+    private void EndLevel()
     {
+        GameUIHandler.OnGameQuit -= EndLevel;
         SceneManager.LoadScene("Title");
     }
 

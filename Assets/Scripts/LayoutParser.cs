@@ -11,6 +11,7 @@ public class LayoutParser : Singleton<LayoutParser>
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
+        TitleUIHandler.OnLayoutPicked += SetActiveLayout;
     }
 
     int dimX;
@@ -46,7 +47,7 @@ public class LayoutParser : Singleton<LayoutParser>
         return new Vector2Int(dimX + 1, dimY);
     }
 
-    public void SetActiveLayout(TextAsset layout)
+    private void SetActiveLayout(TextAsset layout)
     {
         activeLayout = layout;
     }
