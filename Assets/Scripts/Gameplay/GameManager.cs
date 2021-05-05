@@ -18,7 +18,6 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         RandomValues.Init();
-        LayoutParser.instance.GetLayout();
 
         GameUIHandler.OnGameQuit += EndLevel;
 

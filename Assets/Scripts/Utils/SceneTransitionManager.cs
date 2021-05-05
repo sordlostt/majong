@@ -8,7 +8,7 @@ public class SceneTransitionManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        TitleUIHandler.OnGameStarted += LoadGame;
+        TitleUIHandler.OnGameStartCalled += LoadGame;
     }
 
     private void LoadTitle()
@@ -18,7 +18,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void LoadGame()
     {
-        TitleUIHandler.OnGameStarted -= LoadGame;
+        TitleUIHandler.OnGameStartCalled -= LoadGame;
         SceneManager.LoadScene("Game");
     }
 }

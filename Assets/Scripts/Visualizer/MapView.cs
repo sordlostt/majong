@@ -34,7 +34,7 @@ public class MapView : MonoBehaviour
 
                 tileObj.transform.SetParent(canvas.transform);                
                 tileRect.localScale = new Vector3(scale, scale, 1.0f);
-                tileRect.localPosition = new Vector2(scale * (tileCoords.x - tileMapDims.x / 2.0f) * tileWidth, scale * (-tileCoords.y - tileMapDims.y / 2.0f + 10.0f) * tileHeight);
+                tileRect.localPosition = new Vector2(scale * (tileCoords.x - tileMapDims.x / 2.0f) * tileWidth, scale * (tileCoords.y - tileMapDims.y / 2.0f + 0.5f) * tileHeight);
             }
         }
     }

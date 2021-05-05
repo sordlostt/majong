@@ -11,7 +11,7 @@ public class TitleUIHandler : MonoBehaviour
     List<Button> levelButtons = new List<Button>();
 
     public static event Action<TextAsset> OnLayoutPicked;
-    public static event Action OnGameStarted;
+    public static event Action OnGameStartCalled;
 
     private void Awake()
     { 
@@ -20,7 +20,7 @@ public class TitleUIHandler : MonoBehaviour
             LevelButton lvlButton = button.GetComponent<LevelButton>();
             button.GetComponentInChildren<TMP_Text>().text = lvlButton.layout.name;
             button.onClick.AddListener(() => { OnLayoutPicked?.Invoke(lvlButton.layout);
-                                               OnGameStarted?.Invoke(); });
+                                               OnGameStartCalled?.Invoke(); });
         }    
     }
 }
