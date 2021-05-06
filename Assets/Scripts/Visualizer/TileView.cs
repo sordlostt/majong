@@ -1,21 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TileView : MonoBehaviour
+public class TileView : MonoBehaviour, IPointerClickHandler
 {
-    Texture2D tileImage;
-    Button tileButton;
+    [SerializeField]
+    private Image tileBack;
+    [SerializeField]
+    private Image tileFace;
+    [SerializeField]
+    private VisualizerConfig visualizerConfig;
 
-    private void OnEnable()
+    public event Action<TileView> OnTileViewClicked;
+
+    public void SetFace(Sprite tex)
     {
-        tileButton = gameObject.GetComponentInChildren<Button>();
-        tileButton.onClick.AddListener(OnTileClick);
+        tileFace.sprite = tex;
     }
 
-    private void OnTileClick()
+    public void Highlight(bool enabled)
     {
-        Debug.Log("Click");
+        tileBack.color = enabled ? visualizerConfig.TileHighlightColor : Color.white;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnTileViewClicked?.Invoke(this);
     }
 }

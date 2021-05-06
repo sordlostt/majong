@@ -4,39 +4,89 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapView : MonoBehaviour
+public class MapView : Singleton<MapView>
 {
     [SerializeField]
     Canvas canvas;
-    [SerializeField]
-    GameObject tileObject;
 
     [SerializeField]
-    float tileWidth;
-    [SerializeField]
-    float tileHeight;
+    RectTransform tilesAnchor;
 
-    public void DrawView(TileMap tileMap)
+    [SerializeField]
+    VisualizerConfig visualizerConfig;
+
+    int columns;
+    int rows;
+
+    Dictionary<TileView, Tile> tiles = new Dictionary<TileView, Tile>();
+    List<TileView> tileViews = new List<TileView>();
+
+    public event Action<Tile, Tile> OnPairPicked;
+
+    TileView activeTileView = null;
+
+    public void Init(TileMap tileMap)
     {
-        List <Tile> tiles = tileMap.GetTiles();
+        List<Tile> tiles = tileMap.GetTiles();
+        columns = tileMap.GetDims().x;
+        rows = tileMap.GetDims().y;
 
-        foreach (Tile tile in tiles)
+        foreach (var tile in tiles)
         {
             if (tile.GetTileType() != Tile.TileType.EMPTY)
             {
-                Vector2Int tileMapDims = tileMap.GetDims();
-                Vector2Int tileCoords = tile.GetCoords();
-                GameObject tileObj = GameObject.Instantiate(tileObject, Vector3.zero, Quaternion.identity);
-                RectTransform tileRect = tileObj.GetComponent<RectTransform>();
-                Image tileImage = tileObj.GetComponentsInChildren<Image>()[1];
+                TileView tileView = Instantiate<GameObject>(visualizerConfig.TilePrefab, tilesAnchor).GetComponent<TileView>();
 
-                float scale = GetTileScale(tileWidth * tileMap.GetDims().x, tileHeight * tileMap.GetDims().y);
+                foreach (var face in visualizerConfig.TileFaces)
+                {
+                    if (face.tileType == tile.GetTileType())
+                    {
+                        tileView.SetFace(face.sprite);
+                    }
+                }
 
-                tileObj.transform.SetParent(canvas.transform);                
-                tileRect.localScale = new Vector3(scale, scale, 1.0f);
-                tileRect.localPosition = new Vector2(scale * (tileCoords.x - tileMapDims.x / 2.0f) * tileWidth, scale * (tileCoords.y - tileMapDims.y / 2.0f + 0.5f) * tileHeight);
+                tileView.OnTileViewClicked += HandleTileViewClick;
+                this.tiles.Add(tileView, tile);
+                tileViews.Add(tileView);
             }
         }
+    }
+
+    public void DrawView()
+    {
+        float scale = GetTileScale(visualizerConfig.TileWidth * columns, visualizerConfig.TileHeight * rows);
+
+        foreach (var tileView in tileViews)
+        {
+            Tile tile = tiles[tileView];
+            tileView.transform.localScale = new Vector3(scale, scale, 1.0f);
+            tileView.transform.localPosition = new Vector2(scale * visualizerConfig.TileWidth * (tile.GetCoords().x - columns / 2.0f + 0.5f),
+                                                           scale * visualizerConfig.TileHeight * (tile.GetCoords().y - rows / 2.0f - 0.5f));
+        }
+    }
+
+    private void HandleTileViewClick(TileView tileView)
+    {
+        if (activeTileView == null)
+        {
+            activeTileView = tileView;
+            tileView.Highlight(true);
+        }
+        else if (tileView == activeTileView)
+        {
+            activeTileView = null;
+            tileView.Highlight(false);
+        }
+        else
+        {
+            OnPairPicked?.Invoke(tiles[activeTileView],tiles[tileView]);
+        }
+    }
+
+    private void DestroyTileView(TileView tileView)
+    {
+        tileView.OnTileViewClicked -= HandleTileViewClick;
+        Destroy(tileView);
     }
 
     private float GetTileScale(float w, float h)

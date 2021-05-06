@@ -10,12 +10,18 @@ public class TileMap
 
     Dictionary<Vector2Int, Tile> tiles = new Dictionary<Vector2Int, Tile>();
 
+    public TileMap()
+    {
+        MapView.instance.OnPairPicked += CheckPair;
+    }
+
     public void InitializeMap()
     {
         var layout = LayoutParser.instance.GetLayout();
         var dims = LayoutParser.instance.GetDims();
         columns = dims.x;
         rows = dims.y;
+
         for (int i = 0; i < dims.y; i++)
         {
             for (int j = 0; j < dims.x; j++)
@@ -33,14 +39,19 @@ public class TileMap
         }
     }
 
+    private void CheckPair(Tile origin, Tile destination)
+    {
+
+    }
+
+    private void DestroyTile(Tile tile)
+    {
+        tiles[tile.GetCoords()].SetEmptyTileType();
+    }
+
     public List<Tile> GetTiles()
     {
-        List<Tile> result = new List<Tile>();
-        foreach (var tile in tiles.Values)
-        {
-            result.Add(tile);
-        }
-        return result;
+        return new List<Tile>(tiles.Values);
     }
 
     public Vector2Int GetDims()

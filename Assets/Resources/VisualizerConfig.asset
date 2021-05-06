@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38a90592125ed234ab3200ee90df2463, type: 3}
+  m_Name: VisualizerConfig
+  m_EditorClassIdentifier: 
+  tileFaces:
+  - sprite: {fileID: 21300000, guid: a15e5b71923d41542a7881bed606cda3, type: 3}
+    tileType: 0
+  - sprite: {fileID: 21300000, guid: 3c23bb9c1b8354a4498745f5e8d7897f, type: 3}
+    tileType: 1
+  - sprite: {fileID: 21300000, guid: d64f6ec75a7eee64d8af21285fd20466, type: 3}
+    tileType: 2
+  - sprite: {fileID: 21300000, guid: aadb294fc06975a4b85857aa44ae2d06, type: 3}
+    tileType: 3
+  - sprite: {fileID: 21300000, guid: b433154ae3e753b4a9d5b0c6a57b8bd0, type: 3}
+    tileType: 4
+  - sprite: {fileID: 21300000, guid: 64a483d4c0685ba4caeeacac8f6cf704, type: 3}
+    tileType: 5
+  - sprite: {fileID: 21300000, guid: 715064f4f5830664c8c19dedb63a14b6, type: 3}
+    tileType: 6
+  - sprite: {fileID: 21300000, guid: 57c53f06be679a34fb176e5da21c957e, type: 3}
+    tileType: 7
+  - sprite: {fileID: 21300000, guid: 9404da49961bd5c4299189c139ea4d37, type: 3}
+    tileType: 8
+  - sprite: {fileID: 21300000, guid: 7a4600ba7fe0f1247aeaf19e2d49b844, type: 3}
+    tileType: 9
+  - sprite: {fileID: 21300000, guid: 60cd63e2d6f4a854ca90a4b37d01f99f, type: 3}
+    tileType: 10
+  - sprite: {fileID: 21300000, guid: 79cdd269088f43446b392ad7d4a7f54e, type: 3}
+    tileType: 11
+  - sprite: {fileID: 21300000, guid: 140ef1a86854b1f46888ddb9e56b4cb3, type: 3}
+    tileType: 12
+  - sprite: {fileID: 21300000, guid: 2f5e9de241c1ec04b9423d03c42efdd2, type: 3}
+    tileType: 13
+  - sprite: {fileID: 21300000, guid: 350ecb8c73d12534ab232df9ab2f7b97, type: 3}
+    tileType: 14
+  - sprite: {fileID: 21300000, guid: b67b010b9c004864d90fffa67fb6cda5, type: 3}
+    tileType: 15
+  - sprite: {fileID: 21300000, guid: 694a3a158bb4fae4e84c3def11537952, type: 3}
+    tileType: 16
+  - sprite: {fileID: 21300000, guid: 217b8660501908c4680512857a59d199, type: 3}
+    tileType: 17
+  - sprite: {fileID: 21300000, guid: 9599e986add89c34a995facfb0f97b0a, type: 3}
+    tileType: 18
+  - sprite: {fileID: 21300000, guid: 014815b31b5d66f459fecf92a0d8c5af, type: 3}
+    tileType: 19
+  - sprite: {fileID: 21300000, guid: 00dcc45387634bf45b335e1eafd994eb, type: 3}
+    tileType: 20
+  - sprite: {fileID: 21300000, guid: aeed2e891f004284482cc949a94bc5b8, type: 3}
+    tileType: 21
+  - sprite: {fileID: 21300000, guid: 3b4f770659f67384db5da891fae5a46f, type: 3}
+    tileType: 22
+  - sprite: {fileID: 21300000, guid: d5ffaebcbb363574a8f9cc5b17ff83ba, type: 3}
+    tileType: 23
+  - sprite: {fileID: 21300000, guid: 6d29c4f712991a04c97b19cf85b272a2, type: 3}
+    tileType: 24
+  - sprite: {fileID: 21300000, guid: 4a5038c46d81d0440b739f8959403a60, type: 3}
+    tileType: 25
+  - sprite: {fileID: 21300000, guid: 9580586ee89d7a646adac7e5477c5866, type: 3}
+    tileType: 26
+  - sprite: {fileID: 21300000, guid: 94b96ef64d1cb1c47ac47a632a5a4456, type: 3}
+    tileType: 27
+  - sprite: {fileID: 21300000, guid: fe9678fefd1c0704dba350f289bfb779, type: 3}
+    tileType: 28
+  - sprite: {fileID: 21300000, guid: 78e1e99780aeabd489554037f1f4c5b1, type: 3}
+    tileType: 29
+  - sprite: {fileID: 21300000, guid: 96739cbee8333064ebdc18890763efc6, type: 3}
+    tileType: 30
+  - sprite: {fileID: 21300000, guid: 78530f94f1ae8224a9d852c8abdd02b9, type: 3}
+    tileType: 31
+  - sprite: {fileID: 21300000, guid: 6430472220d6e444c9189dfde3ec36cb, type: 3}
+    tileType: 32
+  - sprite: {fileID: 21300000, guid: d88ae79a8852cb84fbd3c8504c9c541b, type: 3}
+    tileType: 33
+  - sprite: {fileID: 21300000, guid: 0e89d4d814e0f434eaf25b6b3e8196c3, type: 3}
+    tileType: 34
+  - sprite: {fileID: 21300000, guid: 9e88a095bd94eb04fa011d9c57b48fc5, type: 3}
+    tileType: 35
+  - sprite: {fileID: 21300000, guid: feb6e17e35deb1447bd6049efed7479e, type: 3}
+    tileType: 36
+  - sprite: {fileID: 21300000, guid: ad4fda3d67e47c2439329b34d7c0fd63, type: 3}
+    tileType: 37
+  - sprite: {fileID: 21300000, guid: 80e18a97b185d16428cd4fdf5d9513b2, type: 3}
+    tileType: 38
+  - sprite: {fileID: 21300000, guid: 8553ea8c31393e342903c4a426427773, type: 3}
+    tileType: 39
+  - sprite: {fileID: 21300000, guid: 0fe7e7a4df8fb754b9e22babc0d9e758, type: 3}
+    tileType: 40
+  - sprite: {fileID: 21300000, guid: 2f27ed9d80988564d858fdad5d15d0d2, type: 3}
+    tileType: 41
+  tileWidth: 95
+  tileHeight: 95
+  tilePrefab: {fileID: 7132589989894853930, guid: 894691de90a73af44824fb477fe78b73, type: 3}
+  tileHighlightColor: {r: 1, g: 0.8965517, b: 0, a: 1}

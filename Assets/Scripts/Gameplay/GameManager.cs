@@ -23,7 +23,8 @@ public class GameManager : Singleton<GameManager>
 
         tileMap = new TileMap();
         tileMap.InitializeMap();
-        mapView.DrawView(tileMap);
+        mapView.Init(tileMap);
+        mapView.DrawView();
     }
 
     private void EndLevel()
