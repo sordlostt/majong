@@ -42,7 +42,7 @@ public class LayoutParser : Singleton<LayoutParser>
                 {
                     if (line[i] == tileChar)
                     {
-                        tileCoords.Add(new Vector2Int(i, gridDimensions.y));
+                        tileCoords.Add(new Vector2Int(i + 1, gridDimensions.y + 1));
                     }
                 }
 
@@ -59,7 +59,7 @@ public class LayoutParser : Singleton<LayoutParser>
         // convert coordinates to proper format
         foreach (var coordinate in tileCoords)
         {
-            result.Add(new Vector2Int(coordinate.x, gridDimensions.y - 1 - coordinate.y));
+            result.Add(new Vector2Int(coordinate.x, gridDimensions.y + 1 - coordinate.y));
         }
 
         return result;
@@ -67,7 +67,8 @@ public class LayoutParser : Singleton<LayoutParser>
 
     public Vector2Int GetDims()
     {
-        return gridDimensions;
+        // add 2 for the borders
+        return new Vector2Int(gridDimensions.x + 2, gridDimensions.y + 2);
     }
 
     private void SetActiveLayout(TextAsset layout)

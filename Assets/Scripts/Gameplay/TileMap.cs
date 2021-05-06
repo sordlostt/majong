@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TileMap
@@ -12,7 +13,7 @@ public class TileMap
 
     public TileMap()
     {
-        MapView.instance.OnPairPicked += CheckPair;
+        MapView.OnPairPicked += CheckPair;
     }
 
     public void InitializeMap()
@@ -33,9 +34,27 @@ public class TileMap
             }
         }
 
-        foreach (Vector2Int coordinate in layout)
+        GenerateRandomTiles(layout);
+    }
+
+    private void GenerateRandomTiles(IEnumerable<Vector2Int> layout)
+    {
+        var coords = layout.ToList();
+
+        if (coords.Count % 2 != 0)
         {
-            tiles[coordinate].SetRandomTileType();
+            Debug.LogError("Layout has an uneven amount of tiles!");
+        }
+
+        List<Vector2Int> coords1 = RandomValues.ShuffleCollection(coords.GetRange(0, coords.Count / 2)).ToList();
+        List<Vector2Int> coords2 = RandomValues.ShuffleCollection(coords.GetRange(coords.Count / 2, coords.Count / 2)).ToList();
+
+        int tileTypeCount = Enum.GetValues(typeof(Tile.TileType)).Length - 1;
+
+        for (int i = 0; i < coords1.Count; i++)
+        {
+            tiles[coords1[i]].Type = (Tile.TileType)(i % tileTypeCount);
+            tiles[coords2[i]].Type = (Tile.TileType)(i % tileTypeCount);
         }
     }
 

@@ -21,7 +21,7 @@ public class MapView : Singleton<MapView>
     Dictionary<TileView, Tile> tiles = new Dictionary<TileView, Tile>();
     List<TileView> tileViews = new List<TileView>();
 
-    public event Action<Tile, Tile> OnPairPicked;
+    public static event Action<Tile, Tile> OnPairPicked;
 
     TileView activeTileView = null;
 

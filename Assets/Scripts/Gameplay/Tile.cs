@@ -52,14 +52,8 @@ public class Tile
         EMPTY
     }
 
-    TileType type;
+    public TileType Type { get; set; }
     Vector2Int coords;
-
-    public void SetRandomTileType()
-    {
-        var values = Enum.GetValues(typeof(Tile.TileType));
-        type = (TileType)values.GetValue(RandomValues.GetRandom(values.Length - 1));
-    }
 
     public void SetCoords(Vector2Int coords)
     {
@@ -73,11 +67,11 @@ public class Tile
 
     public void SetEmptyTileType()
     {
-        type = TileType.EMPTY;
+        Type = TileType.EMPTY;
     }
 
     public TileType GetTileType()
     {
-        return type;
+        return Type;
     }
 }
