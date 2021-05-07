@@ -59,9 +59,10 @@ public class TileMap
         {
             if (tile.Type != Tile.TileType.EMPTY)
             {
-                hint = Tiles.First(x => x.Type == tile.Type && x != tile);
+                hint = Tiles.FirstOrDefault(x => x.Type == tile.Type && x != tile);
                 if (FindPath(tile, hint))
                 {
+                    hint = tile;
                     hintFound = true;
                     break;
                 }
