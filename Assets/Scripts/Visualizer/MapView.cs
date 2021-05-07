@@ -19,14 +19,18 @@ public class MapView : Singleton<MapView>
     int rows;
 
     Dictionary<TileView, Tile> tiles = new Dictionary<TileView, Tile>();
-    List<TileView> tileViews = new List<TileView>();
+    Dictionary<Tile, TileView> tileViews = new Dictionary<Tile, TileView>();
 
     public static event Action<Tile, Tile> OnPairPicked;
+    public static event Action OnViewEmpty;
 
     TileView activeTileView = null;
 
     public void Init(TileMap tileMap)
     {
+        TileMap.OnPairMatching += DestroyTilePair;
+        TileMap.OnPairNotMatching += DeselectTile;
+
         List<Tile> tiles = tileMap.GetTiles();
         columns = tileMap.GetDims().x;
         rows = tileMap.GetDims().y;
@@ -47,7 +51,7 @@ public class MapView : Singleton<MapView>
 
                 tileView.OnTileViewClicked += HandleTileViewClick;
                 this.tiles.Add(tileView, tile);
-                tileViews.Add(tileView);
+                this.tileViews.Add(tile, tileView);
             }
         }
     }
@@ -56,12 +60,11 @@ public class MapView : Singleton<MapView>
     {
         float scale = GetTileScale(visualizerConfig.TileWidth * columns, visualizerConfig.TileHeight * rows);
 
-        foreach (var tileView in tileViews)
+        foreach (var tileView in tileViews.Values)
         {
-            Tile tile = tiles[tileView];
             tileView.transform.localScale = new Vector3(scale, scale, 1.0f);
-            tileView.transform.localPosition = new Vector2(scale * visualizerConfig.TileWidth * (tile.GetCoords().x - columns / 2.0f + 0.5f),
-                                                           scale * visualizerConfig.TileHeight * (tile.GetCoords().y - rows / 2.0f - 0.5f));
+            tileView.transform.localPosition = new Vector2(scale * visualizerConfig.TileWidth * (tiles[tileView].GetCoords().x - columns / 2.0f + 0.5f),
+                                                           scale * visualizerConfig.TileHeight * (tiles[tileView].GetCoords().y - rows / 2.0f - 0.5f));
         }
     }
 
@@ -83,10 +86,26 @@ public class MapView : Singleton<MapView>
         }
     }
 
-    private void DestroyTileView(TileView tileView)
+    private void DeselectTile()
     {
-        tileView.OnTileViewClicked -= HandleTileViewClick;
-        Destroy(tileView);
+        activeTileView.Highlight(false);
+        activeTileView = null;
+    }
+
+    private void DestroyTilePair(Tile tile1, Tile tile2)
+    {
+        tileViews[tile1].OnTileViewClicked -= HandleTileViewClick;
+        tileViews[tile2].OnTileViewClicked -= HandleTileViewClick;
+        Destroy(tileViews[tile1].gameObject);
+        Destroy(tileViews[tile2].gameObject);
+        tileViews.Remove(tile1);
+        tileViews.Remove(tile2);
+        activeTileView = null;
+        if (tileViews.Count == 0)
+        {
+            OnViewEmpty?.Invoke();
+        }
+        DrawView();
     }
 
     private float GetTileScale(float w, float h)

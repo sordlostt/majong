@@ -154,6 +154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapView: {fileID: 84979777}
+  scoreReward: 15
+  scorePenalty: -5
 --- !u!4 &84979776
 Transform:
   m_ObjectHideFlags: 0
