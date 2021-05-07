@@ -24,13 +24,12 @@ public class MapView : MonoBehaviour
     private TileView activeTileView = null;
 
     public static event Action<Tile, Tile> OnPairPicked;
-    public static event Action OnViewEmpty;
-
+    public event Action OnViewEmpty;
 
     public void Init(TileMap tileMap)
     {
-        TileMap.OnPairMatching += DestroyTilePair;
-        TileMap.OnPairNotMatching += DeselectTile;
+        GameManager.instance.OnPairMatched += DestroyTilePair;
+        GameManager.instance.OnPairNotMatched += DeselectTile;
 
         List<Tile> tiles = tileMap.Tiles;
         columns = tileMap.Dims.x;
@@ -52,8 +51,19 @@ public class MapView : MonoBehaviour
 
                 tileView.OnTileViewClicked += HandleTileViewClick;
                 this.tiles.Add(tileView, tile);
-                this.tileViews.Add(tile, tileView);
+                tileViews.Add(tile, tileView);
             }
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.instance.OnPairMatched -= DestroyTilePair;
+        GameManager.instance.OnPairNotMatched -= DeselectTile;
+
+        foreach (var tileView in tileViews.Values)
+        {
+            tileView.OnTileViewClicked -= HandleTileViewClick;
         }
     }
 

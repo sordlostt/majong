@@ -21,7 +21,9 @@ public class TitleUIHandler : MonoBehaviour
             lvlButton.levelStar.gameObject.SetActive(PlayerData.instance.CheckLevelCompletion(lvlButton.layout.name));
             button.GetComponentInChildren<TMP_Text>().text = lvlButton.layout.name;
             button.onClick.AddListener(() => { OnLayoutPicked?.Invoke(lvlButton.layout);
-                                               OnGameStartCalled?.Invoke(); });
+                                               OnGameStartCalled?.Invoke();
+                                               SceneTransitionManager.instance.LoadGame();
+            });
         }    
     }
 }

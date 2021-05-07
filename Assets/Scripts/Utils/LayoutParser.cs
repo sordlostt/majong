@@ -17,7 +17,7 @@ public class LayoutParser : Singleton<LayoutParser>
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(this);
         TitleUIHandler.OnLayoutPicked += SetActiveLayout;
         TitleUIHandler.OnGameStartCalled += ParseLayout;
     }

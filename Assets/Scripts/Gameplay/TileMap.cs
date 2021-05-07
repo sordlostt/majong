@@ -14,9 +14,9 @@ public class TileMap
     public List<Tile> Tiles { get => new List<Tile>(tiles.Values); }
     public Vector2Int Dims { get => new Vector2Int(columns, rows); }
 
-    public static event Action<Tile, Tile> OnPairMatching;
-    public static event Action OnPairMatched;
-    public static event Action OnPairNotMatching;
+    public event Action<Tile, Tile> OnPairMatching;
+    public event Action OnPairMatched;
+    public event Action OnPairNotMatched;
 
     public TileMap()
     {
@@ -76,7 +76,7 @@ public class TileMap
         }
         else
         {
-            OnPairNotMatching?.Invoke();
+            OnPairNotMatched?.Invoke();
         }
     }
 

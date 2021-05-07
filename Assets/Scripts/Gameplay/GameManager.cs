@@ -10,6 +10,9 @@ public class GameManager : Singleton<GameManager>
     private MapView mapView;
 
     [SerializeField]
+    private GameUIHandler UIHandler;
+
+    [SerializeField]
     private float scoreReward;
 
     [SerializeField]
@@ -19,21 +22,47 @@ public class GameManager : Singleton<GameManager>
 
     private TileMap tileMap = new TileMap();
 
-    public static event Action OnGameWon;
-    public static event Action OnGameLost;
+    public float Score { get => score; }
+
+    public event Action OnGameWon;
+    public event Action OnGameQuit;
+
+    public event Action<Tile, Tile> OnPairMatched;
+    public event Action OnPairNotMatched;
+
+    private Action<Tile, Tile> notifyViewOnPairMatched;
+    private Action notifyViewOnPairNotMatched;
 
     protected override void Awake()
     {
         base.Awake();
 
+        notifyViewOnPairMatched = (Tile tile, Tile tile1) => { OnPairMatched?.Invoke(tile, tile1); };
+        notifyViewOnPairNotMatched = () => { OnPairNotMatched?.Invoke(); };
+
         RandomValues.Init();
         tileMap.InitializeMap();
         mapView.Init(tileMap);
 
-        GameUIHandler.OnGameQuit += EndLevel;
-        TileMap.OnPairMatched += AddScore;
-        TileMap.OnPairNotMatching += DeductScore;
-        MapView.OnViewEmpty += GameWon;
+        UIHandler.OnQuitButtonPressed += EndLevel;
+        mapView.OnViewEmpty += GameWon;
+        tileMap.OnPairMatched += AddScore;
+        tileMap.OnPairNotMatched += DeductScore;
+        tileMap.OnPairNotMatched += notifyViewOnPairNotMatched;
+        tileMap.OnPairMatching += notifyViewOnPairMatched;
+    }
+
+    private void OnDisable()
+    {
+        if (!Application.isLoadingLevel)
+        {
+            tileMap.OnPairMatched -= AddScore;
+            tileMap.OnPairNotMatched -= DeductScore;
+            tileMap.OnPairNotMatched -= notifyViewOnPairNotMatched;
+            tileMap.OnPairMatching -= notifyViewOnPairMatched;
+            UIHandler.OnQuitButtonPressed -= EndLevel;
+            mapView.OnViewEmpty -= GameWon;
+        }
     }
 
     private void Start()
@@ -43,8 +72,8 @@ public class GameManager : Singleton<GameManager>
 
     private void EndLevel()
     {
-        GameUIHandler.OnGameQuit -= EndLevel;
-        SceneManager.LoadScene("Title");
+        OnGameQuit?.Invoke();
+        SceneTransitionManager.instance.LoadTitle();
     }
 
     private void GameWon()
@@ -64,10 +93,5 @@ public class GameManager : Singleton<GameManager>
         score += scorePenalty;
         if (score < 0.0f)
             score = 0.0f;
-    }
-
-    public float GetScore()
-    {
-        return score;
     }
 }

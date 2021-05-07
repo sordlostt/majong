@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneTransitionManager : MonoBehaviour
+public class SceneTransitionManager : Singleton<SceneTransitionManager>
 {
-    private void Awake()
+    protected override void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        TitleUIHandler.OnGameStartCalled += LoadGame;
+        base.Awake();
+        DontDestroyOnLoad(this);
     }
 
-    private void LoadTitle()
+    public void LoadTitle()
     {
-        
+        SceneManager.LoadScene("Title");
     }
 
-    private void LoadGame()
+    public void LoadGame()
     {
-        TitleUIHandler.OnGameStartCalled -= LoadGame;
         SceneManager.LoadScene("Game");
     }
 }

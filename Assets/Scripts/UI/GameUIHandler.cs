@@ -31,40 +31,42 @@ public class GameUIHandler : MonoBehaviour
     [SerializeField]
     Button wonQuitButton;
 
-    public static event Action OnGameQuit;
+    public event Action OnQuitButtonPressed;
 
     private void Awake()
     {
         gameLostObject.SetActive(false);
         gameWonObject.SetActive(false);
         exitButton.onClick.AddListener(DrawGameLost);
-        GameManager.OnGameLost += DrawGameLost;
-        GameManager.OnGameWon += DrawGameWon;
+        GameManager.instance.OnGameWon += DrawGameWon;
     }
 
     private void Update()
     {
-        scoreText.text = $"Score: {GameManager.instance.GetScore()}";
+        scoreText.text = $"Score: {GameManager.instance.Score}";
+    }
+
+    private void OnDisable()
+    {
+        GameManager.instance.OnGameWon -= DrawGameWon;
     }
 
     private void DrawGameLost()
     {
-        GameManager.OnGameLost -= DrawGameLost;
         scoreText.gameObject.SetActive(false);
         exitButton.gameObject.SetActive(false);
         gameLostObject.SetActive(true);
-        lostScoreText.text = $"Score: {GameManager.instance.GetScore()}";
-        lostQuitButton.onClick.AddListener(() => OnGameQuit?.Invoke());
+        lostScoreText.text = $"Score: {GameManager.instance.Score}";
+        lostQuitButton.onClick.AddListener(() => OnQuitButtonPressed?.Invoke());
     }
 
     private void DrawGameWon()
     {
-        GameManager.OnGameWon -= DrawGameWon;
         scoreText.gameObject.SetActive(false);
         exitButton.gameObject.SetActive(false);
         gameWonObject.SetActive(true);
-        wonScoreText.text = $"Score: {GameManager.instance.GetScore()}";
+        wonScoreText.text = $"Score: {GameManager.instance.Score}";
         wonHighScoreText.text = $"Highscore: {PlayerData.instance.HighScore}";
-        wonQuitButton.onClick.AddListener(() => OnGameQuit?.Invoke());
+        wonQuitButton.onClick.AddListener(() => OnQuitButtonPressed?.Invoke());
     }
 }

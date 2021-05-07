@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapView: {fileID: 823976191}
+  UIHandler: {fileID: 823976190}
   scoreReward: 15
   scorePenalty: -10
 --- !u!4 &84979776
