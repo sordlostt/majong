@@ -25,6 +25,8 @@ public class GameUIHandler : MonoBehaviour
     [SerializeField]
     GameObject gameWonObject;
     [SerializeField]
+    TMP_Text wonHighScoreText;
+    [SerializeField]
     TMP_Text wonScoreText;
     [SerializeField]
     Button wonQuitButton;
@@ -62,6 +64,7 @@ public class GameUIHandler : MonoBehaviour
         exitButton.gameObject.SetActive(false);
         gameWonObject.SetActive(true);
         wonScoreText.text = $"Score: {GameManager.instance.GetScore()}";
+        wonHighScoreText.text = $"Highscore: {PlayerData.instance.HighScore}";
         wonQuitButton.onClick.AddListener(() => OnGameQuit?.Invoke());
     }
 }

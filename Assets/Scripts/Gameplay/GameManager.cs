@@ -6,17 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    float score;
-    TileMap tileMap;
+    [SerializeField]
+    private MapView mapView;
 
     [SerializeField]
-    MapView mapView;
+    private float scoreReward;
 
     [SerializeField]
-    float scoreReward;
+    private float scorePenalty;
 
-    [SerializeField]
-    float scorePenalty;
+    private float score;
+
+    private TileMap tileMap = new TileMap();
 
     public static event Action OnGameWon;
     public static event Action OnGameLost;
@@ -24,16 +25,19 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
+
         RandomValues.Init();
+        tileMap.InitializeMap();
+        mapView.Init(tileMap);
 
         GameUIHandler.OnGameQuit += EndLevel;
         TileMap.OnPairMatched += AddScore;
         TileMap.OnPairNotMatching += DeductScore;
-        MapView.OnViewEmpty += () => { OnGameWon?.Invoke(); };
+        MapView.OnViewEmpty += GameWon;
+    }
 
-        tileMap = new TileMap();
-        tileMap.InitializeMap();
-        mapView.Init(tileMap);
+    private void Start()
+    {
         mapView.DrawView();
     }
 
@@ -41,6 +45,13 @@ public class GameManager : Singleton<GameManager>
     {
         GameUIHandler.OnGameQuit -= EndLevel;
         SceneManager.LoadScene("Title");
+    }
+
+    private void GameWon()
+    {
+        PlayerData.instance.RefreshHighScore(score);
+        PlayerData.instance.SetLevelCompleted(LayoutParser.instance.ActiveLayout.name);
+        OnGameWon?.Invoke();
     }
 
     private void AddScore()

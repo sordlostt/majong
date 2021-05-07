@@ -53,25 +53,6 @@ public class Tile
     }
 
     public TileType Type { get; set; }
-    Vector2Int coords;
 
-    public void SetCoords(Vector2Int coords)
-    {
-        this.coords = coords;
-    }
-
-    public Vector2Int GetCoords()
-    {
-        return coords;
-    }
-
-    public void SetEmptyTileType()
-    {
-        Type = TileType.EMPTY;
-    }
-
-    public TileType GetTileType()
-    {
-        return Type;
-    }
+    public Vector2Int Coords { get; set; }
 }

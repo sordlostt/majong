@@ -6,18 +6,13 @@ using UnityEngine;
 
 public class TileMap
 {
-    enum Directions
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
+    private int columns;
+    private int rows;
 
-    int columns;
-    int rows;
+    private Dictionary<Vector2Int, Tile> tiles = new Dictionary<Vector2Int, Tile>();
 
-    Dictionary<Vector2Int, Tile> tiles = new Dictionary<Vector2Int, Tile>();
+    public List<Tile> Tiles { get => new List<Tile>(tiles.Values); }
+    public Vector2Int Dims { get => new Vector2Int(columns, rows); }
 
     public static event Action<Tile, Tile> OnPairMatching;
     public static event Action OnPairMatched;
@@ -40,9 +35,9 @@ public class TileMap
             for (int j = 0; j < dims.x; j++)
             {
                 Tile tile = new Tile();
-                tile.SetCoords(new Vector2Int(j, i));
-                tile.SetEmptyTileType();
-                tiles.Add(tile.GetCoords(), tile);
+                tile.Coords = new Vector2Int(j, i);
+                tile.Type = Tile.TileType.EMPTY;
+                tiles.Add(tile.Coords, tile);
             }
         }
 
@@ -74,8 +69,8 @@ public class TileMap
     {
         if (FindPath(origin, target))
         {
-            DestroyTile(origin);
-            DestroyTile(target);
+            RemoveLayoutTile(origin);
+            RemoveLayoutTile(target);
             OnPairMatching?.Invoke(origin, target);
             OnPairMatched?.Invoke();
         }
@@ -92,8 +87,8 @@ public class TileMap
             return false;
         }
 
-        Vector2Int start = origin.GetCoords();
-        Vector2Int end = target.GetCoords();
+        Vector2Int start = origin.Coords;
+        Vector2Int end = target.Coords;
 
         if (start.x == end.x)
         {
@@ -240,7 +235,7 @@ public class TileMap
             coords.x = horizontal ? i : line;
             coords.y = horizontal ? line : i;
 
-            if (tiles[coords].GetTileType() != Tile.TileType.EMPTY)
+            if (tiles[coords].Type != Tile.TileType.EMPTY)
             {
                 return false;
             }
@@ -290,21 +285,9 @@ public class TileMap
         return idx > -1;
     }
 
-    private void DestroyTile(Tile tile)
+    private void RemoveLayoutTile(Tile tile)
     {
-        tiles[tile.GetCoords()].SetEmptyTileType();
+        tiles[tile.Coords].Type = Tile.TileType.EMPTY;
     }
-
-    public List<Tile> GetTiles()
-    {
-        return new List<Tile>(tiles.Values);
-    }
-
-    public Vector2Int GetDims()
-    {
-        return new Vector2Int(columns, rows);
-    }
-
-
 
 }

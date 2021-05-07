@@ -8,7 +8,7 @@ public class LayoutParser : Singleton<LayoutParser>
     [SerializeField]
     char tileChar = 'X';
 
-    TextAsset activeLayout;
+    public TextAsset ActiveLayout { get; set; }
 
     List<Vector2Int> tileCoords;
     Vector2Int gridDimensions;
@@ -26,7 +26,7 @@ public class LayoutParser : Singleton<LayoutParser>
     {
         tileCoords = new List<Vector2Int>();
 
-        using (var reader = new StringReader(activeLayout.text))
+        using (var reader = new StringReader(ActiveLayout.text))
         {
             string line = reader.ReadLine();
 
@@ -73,6 +73,6 @@ public class LayoutParser : Singleton<LayoutParser>
 
     private void SetActiveLayout(TextAsset layout)
     {
-        activeLayout = layout;
+        ActiveLayout = layout;
     }
 }

@@ -18,6 +18,7 @@ public class TitleUIHandler : MonoBehaviour
         foreach (Button button in levelButtons)
         {
             LevelButton lvlButton = button.GetComponent<LevelButton>();
+            lvlButton.levelStar.gameObject.SetActive(PlayerData.instance.CheckLevelCompletion(lvlButton.layout.name));
             button.GetComponentInChildren<TMP_Text>().text = lvlButton.layout.name;
             button.onClick.AddListener(() => { OnLayoutPicked?.Invoke(lvlButton.layout);
                                                OnGameStartCalled?.Invoke(); });
