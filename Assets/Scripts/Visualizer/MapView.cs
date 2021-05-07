@@ -21,7 +21,8 @@ public class MapView : MonoBehaviour
     private Dictionary<TileView, Tile> tiles = new Dictionary<TileView, Tile>();
     private Dictionary<Tile, TileView> tileViews = new Dictionary<Tile, TileView>();
 
-    private TileView activeTileView = null;
+    private TileView currentTileView = null;
+    private TileView currentHintTileView = null;
 
     public static event Action<Tile, Tile> OnPairPicked;
     public event Action OnViewEmpty;
@@ -30,6 +31,7 @@ public class MapView : MonoBehaviour
     {
         GameManager.instance.OnPairMatched += DestroyTilePair;
         GameManager.instance.OnPairNotMatched += DeselectTile;
+        GameManager.instance.OnHintFound += HighlightHint;
 
         List<Tile> tiles = tileMap.Tiles;
         columns = tileMap.Dims.x;
@@ -49,7 +51,7 @@ public class MapView : MonoBehaviour
                     }
                 }
 
-                tileView.OnTileViewClicked += HandleTileViewClick;
+                tileView.OnTileViewClicked += TileViewClickHandler;
                 this.tiles.Add(tileView, tile);
                 tileViews.Add(tile, tileView);
             }
@@ -60,10 +62,11 @@ public class MapView : MonoBehaviour
     {
         GameManager.instance.OnPairMatched -= DestroyTilePair;
         GameManager.instance.OnPairNotMatched -= DeselectTile;
+        GameManager.instance.OnHintFound -= HighlightHint;
 
         foreach (var tileView in tileViews.Values)
         {
-            tileView.OnTileViewClicked -= HandleTileViewClick;
+            tileView.OnTileViewClicked -= TileViewClickHandler;
         }
     }
 
@@ -79,39 +82,50 @@ public class MapView : MonoBehaviour
         }
     }
 
-    private void HandleTileViewClick(TileView tileView)
+    private void TileViewClickHandler(TileView tileView)
     {
-        if (activeTileView == null)
+        if (currentTileView == null)
         {
-            activeTileView = tileView;
-            tileView.Highlight(true);
+            currentTileView = tileView;
+            tileView.HighlightAsCurrent(true);
         }
-        else if (tileView == activeTileView)
+        else if (tileView == currentTileView)
         {
-            activeTileView = null;
-            tileView.Highlight(false);
+            currentTileView = null;
+            tileView.HighlightAsCurrent(false);
         }
         else
         {
-            OnPairPicked?.Invoke(tiles[activeTileView],tiles[tileView]);
+            OnPairPicked?.Invoke(tiles[currentTileView],tiles[tileView]);
         }
+    }
+
+    private void HighlightHint(Tile hint)
+    {
+        if (currentHintTileView != null)
+        {
+            currentHintTileView.HighlightAsHint(false);
+        }
+
+        currentHintTileView = tileViews[hint];
+        currentHintTileView.HighlightAsHint(true);
     }
 
     private void DeselectTile()
     {
-        activeTileView.Highlight(false);
-        activeTileView = null;
+        currentTileView.HighlightAsCurrent(false);
+        currentTileView = null;
     }
 
     private void DestroyTilePair(Tile tile1, Tile tile2)
     {
-        tileViews[tile1].OnTileViewClicked -= HandleTileViewClick;
-        tileViews[tile2].OnTileViewClicked -= HandleTileViewClick;
+        tileViews[tile1].OnTileViewClicked -= TileViewClickHandler;
+        tileViews[tile2].OnTileViewClicked -= TileViewClickHandler;
         Destroy(tileViews[tile1].gameObject);
         Destroy(tileViews[tile2].gameObject);
         tileViews.Remove(tile1);
         tileViews.Remove(tile2);
-        activeTileView = null;
+        currentTileView = null;
         if (tileViews.Count == 0)
         {
             OnViewEmpty?.Invoke();

@@ -33,6 +33,9 @@ public class VisualizerConfig : ScriptableObject
     [SerializeField]
     private Color tileHighlightColor;
 
+    [SerializeField]
+    private Color tileHintColor;
+
     public List<TileFace> TileFaces { get => tileFaces; }
 
     public float TileWidth { get => tileWidth; }
@@ -46,5 +49,7 @@ public class VisualizerConfig : ScriptableObject
     public GameObject TilePrefab { get => tilePrefab; }
 
     public Color TileHighlightColor { get => tileHighlightColor; }
+
+    public Color TileHintColor { get => tileHintColor; }
 
 }

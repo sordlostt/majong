@@ -18,8 +18,6 @@ public class LayoutParser : Singleton<LayoutParser>
     {
         base.Awake();
         DontDestroyOnLoad(this);
-        TitleUIHandler.OnLayoutPicked += SetActiveLayout;
-        TitleUIHandler.OnGameStartCalled += ParseLayout;
     }
 
     public void ParseLayout()
@@ -69,10 +67,5 @@ public class LayoutParser : Singleton<LayoutParser>
     {
         // add 2 for the borders
         return new Vector2Int(gridDimensions.x + 2, gridDimensions.y + 2);
-    }
-
-    private void SetActiveLayout(TextAsset layout)
-    {
-        ActiveLayout = layout;
     }
 }

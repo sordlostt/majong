@@ -10,9 +10,6 @@ public class TitleUIHandler : MonoBehaviour
     [SerializeField]
     List<Button> levelButtons = new List<Button>();
 
-    public static event Action<TextAsset> OnLayoutPicked;
-    public static event Action OnGameStartCalled;
-
     private void Awake()
     { 
         foreach (Button button in levelButtons)
@@ -22,8 +19,8 @@ public class TitleUIHandler : MonoBehaviour
             lvlButton.LevelStar.gameObject.SetActive(PlayerData.instance.CheckLevelCompletion(lvlButton.Layout.name));
             button.GetComponentInChildren<TMP_Text>().text = lvlButton.Layout.name;
             button.onClick.AddListener(() => {
-                OnLayoutPicked?.Invoke(lvlButton.Layout);
-                OnGameStartCalled?.Invoke();
+                LayoutParser.instance.ActiveLayout = lvlButton.Layout;
+                LayoutParser.instance.ParseLayout();
                 SceneTransitionManager.instance.LoadGame();
             });
         }    

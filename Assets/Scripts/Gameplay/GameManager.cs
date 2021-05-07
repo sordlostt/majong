@@ -29,12 +29,14 @@ public class GameManager : Singleton<GameManager>
     public string LevelName { get => levelName; }
 
     public event Action OnGameWon;
-    public event Action OnGameQuit;
+    public event Action OnGameLost;
 
     public event Action<Tile, Tile> OnPairMatched;
+    public event Action<Tile> OnHintFound;
     public event Action OnPairNotMatched;
 
     private Action<Tile, Tile> notifyViewOnPairMatched;
+    private Action<Tile> notifyViewOnHintFound;
     private Action notifyViewOnPairNotMatched;
 
     protected override void Awake()
@@ -42,8 +44,8 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
 
         notifyViewOnPairMatched = (Tile tile, Tile tile1) => { OnPairMatched?.Invoke(tile, tile1); };
+        notifyViewOnHintFound = (Tile tile) => { OnHintFound?.Invoke(tile); };
         notifyViewOnPairNotMatched = () => { OnPairNotMatched?.Invoke(); };
-
         RandomValues.Init();
         tileMap.InitializeMap();
         mapView.Init(tileMap);
@@ -56,6 +58,8 @@ public class GameManager : Singleton<GameManager>
         tileMap.OnPairNotMatched += DeductScore;
         tileMap.OnPairNotMatched += notifyViewOnPairNotMatched;
         tileMap.OnPairMatching += notifyViewOnPairMatched;
+        tileMap.OnHintFound += notifyViewOnHintFound;
+        tileMap.OnHintNotFound += GameLost;
     }
 
     private void OnDisable()
@@ -64,6 +68,8 @@ public class GameManager : Singleton<GameManager>
         tileMap.OnPairNotMatched -= DeductScore;
         tileMap.OnPairNotMatched -= notifyViewOnPairNotMatched;
         tileMap.OnPairMatching -= notifyViewOnPairMatched;
+        tileMap.OnHintFound -= notifyViewOnHintFound;
+        tileMap.OnHintNotFound -= GameLost;
         UIHandler.OnQuitButtonPressed -= EndLevel;
         mapView.OnViewEmpty -= GameWon;
     }
@@ -75,7 +81,6 @@ public class GameManager : Singleton<GameManager>
 
     private void EndLevel()
     {
-        OnGameQuit?.Invoke();
         SceneTransitionManager.instance.LoadTitle();
     }
 
@@ -84,6 +89,11 @@ public class GameManager : Singleton<GameManager>
         PlayerData.instance.RefreshHighScore(score, levelName);
         PlayerData.instance.SetLevelCompleted(levelName);
         OnGameWon?.Invoke();
+    }
+
+    private void GameLost()
+    {
+        OnGameLost?.Invoke();
     }
 
     private void AddScore()

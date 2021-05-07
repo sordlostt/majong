@@ -39,6 +39,7 @@ public class GameUIHandler : MonoBehaviour
         gameWonObject.SetActive(false);
         exitButton.onClick.AddListener(DrawGameLost);
         GameManager.instance.OnGameWon += DrawGameWon;
+        GameManager.instance.OnGameLost += DrawGameLost;
     }
 
     private void Update()
@@ -49,6 +50,7 @@ public class GameUIHandler : MonoBehaviour
     private void OnDisable()
     {
         GameManager.instance.OnGameWon -= DrawGameWon;
+        GameManager.instance.OnGameLost -= DrawGameLost;
     }
 
     private void DrawGameLost()

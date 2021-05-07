@@ -21,9 +21,14 @@ public class TileView : MonoBehaviour, IPointerClickHandler
         tileFace.sprite = tex;
     }
 
-    public void Highlight(bool enabled)
+    public void HighlightAsCurrent(bool enabled)
     {
         tileBack.color = enabled ? visualizerConfig.TileHighlightColor : Color.white;
+    }
+
+    public void HighlightAsHint(bool enabled)
+    {
+        tileBack.color = enabled ? visualizerConfig.TileHintColor : Color.white;
     }
 
     public void OnPointerClick(PointerEventData eventData)

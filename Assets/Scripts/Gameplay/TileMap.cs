@@ -15,8 +15,10 @@ public class TileMap
     public Vector2Int Dims { get => new Vector2Int(columns, rows); }
 
     public event Action<Tile, Tile> OnPairMatching;
+    public event Action<Tile> OnHintFound;
     public event Action OnPairMatched;
     public event Action OnPairNotMatched;
+    public event Action OnHintNotFound;
 
     public TileMap()
     {
@@ -41,7 +43,44 @@ public class TileMap
             }
         }
 
-        GenerateRandomTiles(layout);
+        // randomize tiles until there is a move available at the start
+        do
+        {
+            GenerateRandomTiles(layout);
+        } while (!LookForHints(true));
+    }
+
+    private bool LookForHints(bool levelStart)
+    {
+        bool hintFound = false;
+        Tile hint = null;
+
+        foreach (var tile in Tiles)
+        {
+            if (tile.Type != Tile.TileType.EMPTY)
+            {
+                hint = Tiles.First(x => x.Type == tile.Type && x != tile);
+                if (FindPath(tile, hint))
+                {
+                    hintFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (!levelStart)
+        {
+            if (hintFound)
+            {
+                OnHintFound?.Invoke(hint);
+            }
+            else
+            {
+                OnHintNotFound?.Invoke();
+            }
+        }
+
+        return hintFound;
     }
 
     private void GenerateRandomTiles(IEnumerable<Vector2Int> layout)
@@ -77,6 +116,7 @@ public class TileMap
         else
         {
             OnPairNotMatched?.Invoke();
+            LookForHints(false);
         }
     }
 
