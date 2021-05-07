@@ -99,5 +99,7 @@ MonoBehaviour:
     tileType: 41
   tileWidth: 95
   tileHeight: 95
+  tilePositioningOffsetX: 0.5
+  tilePositioningOffsetY: -0.5
   tilePrefab: {fileID: 7132589989894853930, guid: 894691de90a73af44824fb477fe78b73, type: 3}
   tileHighlightColor: {r: 1, g: 0.8965517, b: 0, a: 1}

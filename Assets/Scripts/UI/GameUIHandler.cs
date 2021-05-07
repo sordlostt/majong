@@ -66,7 +66,7 @@ public class GameUIHandler : MonoBehaviour
         exitButton.gameObject.SetActive(false);
         gameWonObject.SetActive(true);
         wonScoreText.text = $"Score: {GameManager.instance.Score}";
-        wonHighScoreText.text = $"Highscore: {PlayerData.instance.HighScore}";
+        wonHighScoreText.text = $"Highscore: {PlayerData.instance.GetHighScore(GameManager.instance.LevelName)}";
         wonQuitButton.onClick.AddListener(() => OnQuitButtonPressed?.Invoke());
     }
 }

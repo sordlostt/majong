@@ -22,6 +22,12 @@ public class VisualizerConfig : ScriptableObject
     private float tileHeight;
 
     [SerializeField]
+    private float tilePositioningOffsetX;
+
+    [SerializeField]
+    private float tilePositioningOffsetY;
+
+    [SerializeField]
     private GameObject tilePrefab;
 
     [SerializeField]
@@ -32,6 +38,10 @@ public class VisualizerConfig : ScriptableObject
     public float TileWidth { get => tileWidth; }
 
     public float TileHeight { get => tileHeight; }
+
+    public float TilePositioningOffsetX { get => tilePositioningOffsetX; }
+
+    public float TilePositioningOffsetY { get => tilePositioningOffsetY; }
 
     public GameObject TilePrefab { get => tilePrefab; }
 

@@ -20,9 +20,13 @@ public class GameManager : Singleton<GameManager>
 
     private float score;
 
+    private string levelName;
+
     private TileMap tileMap = new TileMap();
 
     public float Score { get => score; }
+
+    public string LevelName { get => levelName; }
 
     public event Action OnGameWon;
     public event Action OnGameQuit;
@@ -44,6 +48,8 @@ public class GameManager : Singleton<GameManager>
         tileMap.InitializeMap();
         mapView.Init(tileMap);
 
+        levelName = LayoutParser.instance.ActiveLayout.name;
+
         UIHandler.OnQuitButtonPressed += EndLevel;
         mapView.OnViewEmpty += GameWon;
         tileMap.OnPairMatched += AddScore;
@@ -54,15 +60,12 @@ public class GameManager : Singleton<GameManager>
 
     private void OnDisable()
     {
-        if (!Application.isLoadingLevel)
-        {
-            tileMap.OnPairMatched -= AddScore;
-            tileMap.OnPairNotMatched -= DeductScore;
-            tileMap.OnPairNotMatched -= notifyViewOnPairNotMatched;
-            tileMap.OnPairMatching -= notifyViewOnPairMatched;
-            UIHandler.OnQuitButtonPressed -= EndLevel;
-            mapView.OnViewEmpty -= GameWon;
-        }
+        tileMap.OnPairMatched -= AddScore;
+        tileMap.OnPairNotMatched -= DeductScore;
+        tileMap.OnPairNotMatched -= notifyViewOnPairNotMatched;
+        tileMap.OnPairMatching -= notifyViewOnPairMatched;
+        UIHandler.OnQuitButtonPressed -= EndLevel;
+        mapView.OnViewEmpty -= GameWon;
     }
 
     private void Start()
@@ -78,8 +81,8 @@ public class GameManager : Singleton<GameManager>
 
     private void GameWon()
     {
-        PlayerData.instance.RefreshHighScore(score);
-        PlayerData.instance.SetLevelCompleted(LayoutParser.instance.ActiveLayout.name);
+        PlayerData.instance.RefreshHighScore(score, levelName);
+        PlayerData.instance.SetLevelCompleted(levelName);
         OnGameWon?.Invoke();
     }
 

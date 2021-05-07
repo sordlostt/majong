@@ -74,8 +74,8 @@ public class MapView : MonoBehaviour
         foreach (var tileView in tileViews.Values)
         {
             tileView.transform.localScale = new Vector3(scale, scale, 1.0f);
-            tileView.transform.localPosition = new Vector2(scale * visualizerConfig.TileWidth * (tiles[tileView].Coords.x - columns / 2.0f + 0.5f),
-                                                           scale * visualizerConfig.TileHeight * (tiles[tileView].Coords.y - rows / 2.0f - 0.5f));
+            tileView.transform.localPosition = new Vector2(scale * visualizerConfig.TileWidth * (tiles[tileView].Coords.x - columns / 2.0f + visualizerConfig.TilePositioningOffsetX),
+                                                           scale * visualizerConfig.TileHeight * (tiles[tileView].Coords.y - rows / 2.0f) + visualizerConfig.TilePositioningOffsetY);
         }
     }
 
@@ -121,6 +121,8 @@ public class MapView : MonoBehaviour
 
     private float GetTileScale(float w, float h)
     {
-        return Mathf.Min(Mathf.Clamp01(Screen.width / (w * canvas.scaleFactor)), Mathf.Clamp01(Screen.height / (h * canvas.scaleFactor)));
+        float widthClamped = Mathf.Clamp01(Screen.width / w);
+        float heightClamped = Mathf.Clamp01(Screen.height / h);
+        return Mathf.Min(widthClamped, heightClamped);
     }
 }

@@ -10,26 +10,23 @@ public class PlayerData : Singleton<PlayerData>
         DontDestroyOnLoad(this);
     }
 
-    public float HighScore
+    public float GetHighScore(string levelName)
     {
-        get
+        if (PlayerPrefs.HasKey("Highscore" + levelName))
         {
-            if (PlayerPrefs.HasKey("Highscore"))
-            {
-                return PlayerPrefs.GetFloat("Highscore");
-            }
-            else
-            {
-                return 0;
-            }
+            return PlayerPrefs.GetFloat("Highscore" + levelName);
+        }
+        else
+        {
+            return 0.0f;
         }
     }
 
-    public void RefreshHighScore(float score)
+    public void RefreshHighScore(float score, string levelName)
     {
-        if (score > HighScore)
+        if (score > GetHighScore(levelName))
         {
-            PlayerPrefs.SetFloat("Highscore", score);
+            PlayerPrefs.SetFloat("Highscore" + levelName, score);
         }
     }
 

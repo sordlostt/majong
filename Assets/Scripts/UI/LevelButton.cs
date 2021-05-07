@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class LevelButton : MonoBehaviour
 {
-    public TextAsset layout;
-    public Image levelStar;
+    [SerializeField]
+    private TextAsset layout;
+    [SerializeField]
+    private Image levelStar;
+    public TextAsset Layout { get => layout; }
+    public Image LevelStar { get => levelStar; }
 }
