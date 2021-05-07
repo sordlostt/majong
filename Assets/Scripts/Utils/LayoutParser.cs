@@ -65,7 +65,7 @@ public class LayoutParser : Singleton<LayoutParser>
 
     public Vector2Int GetDims()
     {
-        // add 2 for the borders
+        // add 2 to the borders so that we can travel around the board
         return new Vector2Int(gridDimensions.x + 2, gridDimensions.y + 2);
     }
 }
